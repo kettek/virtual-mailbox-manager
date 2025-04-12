@@ -1,0 +1,24 @@
+html
+	head
+		title VMM: Manage
+	body
+		h1 Manage: 
+			span= username
+			if admin
+				span (admin)
+		section
+			if error
+				h2 Error
+				p= error
+			if message
+				h2 Message
+				p= message
+		section
+			form(method='post')
+				input(type='hidden' name='action' value='logout')
+				input(type='submit' value='logout')
+			include includes/password.pug
+			include includes/users.pug
+			include includes/domains.pug
+			include includes/aliases.pug
+

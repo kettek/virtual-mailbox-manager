@@ -1,0 +1,38 @@
+fieldset
+	legend aliases
+	details
+		summary alias info
+		p Aliases provide a way to route messages intended for one email address to another. This can be used to have different front-facing email aliases that all alias to the same end-target, such as "business@domain.com", "news@domain.com", "help@domain.com" all pointing to "user@domain.com".
+		p An alias can also be used to simply redirect email sent to your primary account on this server to an external server by providing your account here as the source and the target external account as the destination, such as "you@gamu.group" -> "you@gmail.com".
+		if admin
+			details
+				summary SQL
+				pre
+					code.
+						CREATE TABLE `virtual_aliases` (
+						  `id` int(11) NOT NULL AUTO_INCREMENT,
+						  `domain_id` int(11) NOT NULL,
+						  `owner` varchar(100) DEFAULT NULL,
+						  `source` varchar(100) NOT NULL,
+						  `destination` varchar(100) NOT NULL,
+						  PRIMARY KEY (`id`),
+						  KEY `domain_id` (`domain_id`),
+						  CONSTRAINT `virtual_aliases_ibfk_1` FOREIGN KEY (`domain_id`) REFERENCES `virtual_domains` (`id`) ON DELETE CASCADE
+						) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8
+	if aliases
+		each alias in aliases
+			form(method='post')
+				input(type='hidden' name='action' value='changeAlias')
+				input(type='hidden' name='id' value=alias.id)
+				input(type='email' name='source' value=alias.source placeholder='user@source')
+				input(type='email' name='destination' value=alias.destination placeholder='user@destination')
+				input(type='submit' value='change')
+			form(method='post')
+				input(type='hidden' name='action' value='removeAlias')
+				input(type='hidden' name='id' value=alias.id)
+				input(type='submit' value='remove')
+	form(method='post')
+		input(type='hidden' name='action' value='addAlias')
+		input(type='email' name='source' placeholder='user@source')
+		input(type='email' name='destination' placeholder='user@destination')
+		input(type='submit' value='add')

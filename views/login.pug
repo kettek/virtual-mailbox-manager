@@ -1,0 +1,13 @@
+html
+	head
+		title VMM: Login
+	body
+		h1 Login
+		section
+			form(method='post')
+				input(name='username' type='username' placeholder='user@domain')
+				input(name='password' type='password' placeholder='password')
+				input(type='submit' value='login')
+			if error
+				h2 Error
+				p= error

@@ -1,0 +1,45 @@
+if admin
+	fieldset
+		legend users
+		details
+			summary users info
+			p Users are virtual users represented by an email address and a domain_id association.
+			details
+				summary SQL
+				pre
+					code.
+						CREATE TABLE `virtual_users` (
+						  `id` int(11) NOT NULL AUTO_INCREMENT,
+						  `domain_id` int(11) NOT NULL,
+						  `password` varchar(106) NOT NULL,
+						  `email` varchar(100) NOT NULL,
+						  PRIMARY KEY (`id`),
+						  UNIQUE KEY `email` (`email`),
+						  KEY `domain_id` (`domain_id`),
+						  CONSTRAINT `virtual_users_ibfk_1` FOREIGN KEY (`domain_id`) REFERENCES `virtual_domains` (`id`) ON DELETE CASCADE
+						) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8
+		if users
+			each user in users
+				form(method='post')
+					input(type='hidden' name='action' value='changeUser')
+					input(type='hidden' name='id' value=user.id)
+					input(type='number' name='new_id' value=user.id placeholder='id')
+					input(type='email' name='email' value=user.email placeholder='user@domain.tld')
+					input(type='password' name='password' placeholder='password')
+					input(type='password' name='password2' placeholder='password confirm')
+					input(name='domain_id' value=user.domain_id placeholder='domain id')
+					input(type='submit' value='change' name='changeUser')
+				form(method='post')
+					input(type='hidden' name='action' value='removeUser')
+					input(type='hidden' name='id' value=user.id)
+					input(type='submit' value='remove')
+		form(method='post')
+			input(type='hidden' name='action' value='addUser')
+			input(type='email' name='email' placeholder='user@domain.tld')
+			select(name='domain_id')
+				if domains
+					each domain in domains
+						option(value=domain.id)= domain.name
+			input(type='password' name='password' placeholder='password')
+			input(type='password' name='password2' placeholder='password confirm')
+			input(type='submit' value='add')

@@ -1,0 +1,35 @@
+fieldset
+	legend domains
+	details
+		summary domains info
+		p Domains provide a location for users to exist within. MX DNS records must be appropriately set for email to be send/received from the domains listed here. The primary SQL "id" column is used for associating a user account with a given domain. This value is stored as the domain_id column on the user.
+		details
+			summary SQL
+			pre
+				code.
+					CREATE TABLE `virtual_domains` (
+					  `id` int(11) NOT NULL AUTO_INCREMENT,
+					  `name` varchar(50) NOT NULL,
+					  PRIMARY KEY (`id`)
+					) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8
+	if admin
+		if domains
+			each domain in domains
+				form(method='post')
+					input(type='hidden' name='action' value='changeDomain')
+					input(type='hidden' name='id' value=domain.id)
+					input(type='number' name='new_id' value=domain.id)
+					input(name='name' value=domain.name placeholder='domain.tld')
+					input(type='submit' value='change')
+				form(method='post')
+					input(type='hidden' name='action' value='removeDomain')
+					input(type='hidden' name='id' value=domain.id)
+					input(type='submit' value='remove')
+		form(method='post')
+			input(type='hidden' name='action' value='addDomain')
+			input(name='name' placeholder='domain.tld')
+			input(type='submit' value='add')
+	else
+		if domains
+			each domain in domains
+				pre= domain.name
