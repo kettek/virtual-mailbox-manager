@@ -2,6 +2,7 @@ const express = require('express')
 const session = require('express-session')
 const bodyParser = require('body-parser')
 const crypto = require('crypto')
+const path = require('path')
 
 async function checkCredentials(ctx, u, p) {
 	p = await makePassword(p)
