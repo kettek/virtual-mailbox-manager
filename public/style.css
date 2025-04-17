@@ -12,7 +12,10 @@ input {
   margin: 0.25rem;
 }
 
-input[type="button"] {
+input[type="button"],
+input[type="submit"] {
+  background: #000;
+  border: 1px solid #111;
   border-radius: 0.25rem;
 }
 
