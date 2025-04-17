@@ -208,6 +208,7 @@ async function run(ctx, {port=80,secret='vmm'}={}) {
 			res.render('login', {error: err})
 		}
 	})
+	e.use(express.static(path.join(__dirname, 'public')))
 
 	e.listen(port)
 	ctx.express = e
