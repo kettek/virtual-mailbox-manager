@@ -19,6 +19,18 @@ input[type="submit"] {
   border-radius: 0.25rem;
 }
 
+input[value="remove"] {
+  background: #722;
+}
+
+input[value="change"] {
+  background: #227;
+}
+
+input[value="add"] {
+  background: #272;
+}
+
 fieldset {
   border: 1px solid #000;
   border-radius: 0.25rem;
