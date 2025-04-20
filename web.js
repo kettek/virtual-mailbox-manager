@@ -37,14 +37,14 @@ async function isAdmin(ctx, u) {
 	return false
 }
 
-async function run(ctx, {port=80,secret='vmm'}={}) {
+async function run(ctx, { port = 80, secret = 'vmm' } = {}) {
 	const e = express()
 	e.use(session({
 		secret: secret,
 		resave: true,
 		saveUninitialized: true,
 	}))
-	e.use(bodyParser.urlencoded({extended: true}))
+	e.use(bodyParser.urlencoded({ extended: true }))
 	e.use(bodyParser.json())
 	e.set('view engine', 'pug')
 
@@ -101,16 +101,16 @@ async function run(ctx, {port=80,secret='vmm'}={}) {
 					if (!o.admin) throw `wat u tryin to do`
 					let { id, new_id, name } = req.body
 					id = Number(id)
-					let d = o.domains.find(v=>v.id===id)
+					let d = o.domains.find(v => v.id === id)
 					let r = await ctx.mysql.query('UPDATE virtual_domains SET id=?, name=? WHERE id=?', [new_id, name, id])
-					o.message = `changed domain ${id}:${d?d.name:''} to ${new_id}:${name}`
+					o.message = `changed domain ${id}:${d ? d.name : ''} to ${new_id}:${name}`
 				} else if (req.body.action === 'removeDomain') {
 					if (!o.admin) throw `wat u tryin to do`
 					let id = req.body.id
 					id = Number(id)
-					let d = o.domains.find(v=>v.id===id)
+					let d = o.domains.find(v => v.id === id)
 					let r = await ctx.mysql.query('DELETE FROM virtual_domains WHERE id=?', [id])
-					o.message = `removed domain ${d?d.name:''}`
+					o.message = `removed domain ${d ? d.name : ''}`
 				} else if (req.body.action === 'addDomain') {
 					if (!o.admin) throw `wat u tryin to do`
 					let { name } = req.body
@@ -136,7 +136,7 @@ async function run(ctx, {port=80,secret='vmm'}={}) {
 				} else if (req.body.action === 'changeUser') {
 					if (!o.admin) throw `wat u tryin to do`
 					let { id, new_id, domain_id, email, password, password2 } = req.body
-					let u = o.users.find(v=>v.id===Number(id))
+					let u = o.users.find(v => v.id === Number(id))
 					if (password) {
 						if (!password || !password2) {
 							throw 'passwords must not be empty'
@@ -153,7 +153,7 @@ async function run(ctx, {port=80,secret='vmm'}={}) {
 					let { id, source, destination } = req.body
 					if (!source || !destination) {
 						o.error = 'alias source and destination is required'
-					} else if (!o.aliases.find(v=>v.id === Number(id))) {
+					} else if (!o.aliases.find(v => v.id === Number(id))) {
 						o.error = 'target id does not exist in owned aliases'
 					} else {
 						let r = await ctx.mysql.query('UPDATE virtual_aliases SET source=?, destination=? WHERE id=?', [source, destination, id])
@@ -161,7 +161,7 @@ async function run(ctx, {port=80,secret='vmm'}={}) {
 				} else if (req.body.action === 'removeAlias') {
 					let { id } = req.body
 					id = Number(id)
-					if (!o.aliases.find(v=>v.id === id)) {
+					if (!o.aliases.find(v => v.id === id)) {
 						o.error = 'target id does not exist in owned aliases'
 					} else {
 						let r = await ctx.mysql.query('DELETE FROM virtual_aliases WHERE id=?', [id])
@@ -188,7 +188,7 @@ async function run(ctx, {port=80,secret='vmm'}={}) {
 					o.domains = await ctx.mysql.query('SELECT * FROM virtual_domains')
 					o.users = await ctx.mysql.query('SELECT * FROM virtual_users')
 				}
-			} catch(err) {
+			} catch (err) {
 				o.error = err
 			}
 			return res.render('manage', o)
@@ -205,8 +205,8 @@ async function run(ctx, {port=80,secret='vmm'}={}) {
 			} else {
 				throw 'please enter a username and password'
 			}
-		} catch(err) {
-			res.render('login', {error: err})
+		} catch (err) {
+			res.render('login', { error: err })
 		}
 	})
 	e.use('/manage/public', express.static(path.join(__dirname, 'public')))
